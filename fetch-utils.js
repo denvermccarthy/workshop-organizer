@@ -8,9 +8,21 @@ export function getUser() {
 }
 
 export async function getWorkshops() {
-    const response = await client.from('workshops').select('*, participants (*)');
-
+    const response = await client.from('workshops').select(`*, participants (*)`);
     console.log(response);
+    return checkError(response);
+}
+
+export async function createParticipant(data) {
+    const response = await client.from('participants').insert({ name: data.name, workshop_id: data.workshop_id });
+
+    return checkError(response);
+}
+
+export async function deleteParticipant(id) {
+    const resp = await client.from('participants').delete().match({ id });
+    
+    return checkError(resp);
 }
 
 export function checkAuth() {
